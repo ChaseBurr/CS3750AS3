@@ -7,17 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Game_Of_Life
+namespace ChatSystem
 {
     public class Program
     {
-        /// <summary>
-        /// Checks for Neighbors
-        /// </summary>
-        public static void IsNeighbor()
-        {
-
-        }
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();

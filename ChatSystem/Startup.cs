@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SignalRGame.Hubs;
+using SignalRChat.Hubs;
 
-namespace Game_Of_Life
+namespace ChatSystem
 {
     public class Startup
     {
@@ -26,7 +26,6 @@ namespace Game_Of_Life
         {
             services.AddRazorPages();
             services.AddSignalR();
-            services.AddHostedService<GameOfLife>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,7 +52,7 @@ namespace Game_Of_Life
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
-                endpoints.MapHub<GameHub>("/gameHub");
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
         }
     }
