@@ -1,0 +1,28 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Game Of Life";
+}
+
+<style>
+
+    canvas {
+        background: white;
+        /*border: 1px solid black;*/
+    }
+</style>
+
+<div class="text-center">
+    <h1 class="display-4">Game Of Life</h1>
+    <div id="boarddiv">
+        <canvas id="board">Canvas not supported</canvas>
+    </div>
+</div>
+<div id="controls">
+    <input id="timeIntervalSlider" type="range" name="timeIntervalSlider" min="200" max="5000" value="2000" />
+    <input id="pausePlayButton" type="button" name="pausePlayButton" value="Start" />
+    <input id="iterateButton" type="button" name="iterateButton" value="Iterate Life" />
+</div>
+
+<script src="~/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/GameOfLife.js"></script>
