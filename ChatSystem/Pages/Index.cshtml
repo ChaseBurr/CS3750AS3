@@ -1,30 +1,26 @@
 ﻿@page
-<div class="container">
-    <div class="row">&nbsp;</div>
-    <div class="row">
-        <div class="col-2">User</div>
-        <div class="col-4"><input type="text" id="userInput" /></div>
-    </div>
-    <div class="row">
-        <div class="col-2">Message</div>
-        <div class="col-4"><input type="text" id="messageInput" /></div>
-    </div>
-    <div class="row">&nbsp;</div>
-    <div class="row">
-        <div class="col-6">
-            <input type="button" id="sendButton" value="Send Message" />
+    <main>
+        <div id="cards">
+            <div id="">
+                <h1>
+
+                </h1>
+                <article>
+
+                </article>
+            </div>
         </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-12">
-        <hr />
-    </div>
-</div>
-<div class="row">
-    <div class="col-6">
-        <ul id="messagesList"></ul>
-    </div>
-</div>
+    </main>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>
+<script>
+
+    let cards = document.getElementById('cards');
+
+    connection.on("UpdateCard", (title, content) => {
+        let card = cards.getElementById('cardID');
+        card.querySelector('h1').innerHTML = title;
+        card.querySelector('article').innerHTML = content;
+    }
+
+</script>
