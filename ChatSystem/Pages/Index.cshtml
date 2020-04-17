@@ -1,5 +1,5 @@
 ﻿@page
-    <main>
+<!--<main>
         <div id="cards">
             <div id="">
                 <h1>
@@ -24,3 +24,67 @@
     }
 
 </script>
+
+<link rel="stylesheet" herf="../../css/style.css" />-->
+
+<style>
+    .login {
+        min-width: 300px;
+        max-width: 450px;
+        background: #fff;
+        position: absolute;
+        top: 35%;
+        left: 40%;
+        box-shadow: 0px 2px 5px rgba(0,0,0,.25);
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    form {
+        display: block;
+        width: 100%;
+        padding: 2em;
+    }
+
+    input {
+        display: block;
+        margin: auto auto;
+        width: 100%;
+        margin-bottom: 2em;
+        padding: .5em 0;
+        border-bottom: 1px solid #eaeaea;
+        padding-bottom: 1.25em;
+        color: #757575;
+    }
+
+    .btn {
+        display: inline-block;
+        background: blue;
+        color: white;
+    }
+
+        .btn:hover {
+            background: lightblue;
+            color: white;
+        }
+
+        .btn:active {
+            background: darkblue;
+            color: white;
+        }
+</style>
+
+<div class="login">
+    <h2>Login</h2>
+    <form>
+        <input type="text" name="username" placeholder="username" />
+        <button type="submit" class="btn">Login</button>
+    </form>
+</div>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>
+
+
