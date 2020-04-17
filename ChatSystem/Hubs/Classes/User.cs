@@ -10,7 +10,7 @@ namespace FinalProject.Hubs.Classes
     public class User
     {
         [JsonProperty("userID")]
-        private string userID { get; set; }
+        public string userID { get; set; }
 
         [JsonProperty("username")]
         private string username { get; set; }

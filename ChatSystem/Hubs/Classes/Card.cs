@@ -13,7 +13,7 @@ namespace FinalProject.Hubs.Classes
         private Guid cardID { get; set; }
 
         [JsonProperty("userID")]
-        private string userID { get; set; }
+        public string userID { get; set; }
 
         [JsonProperty("editable")]
         private bool editable { get; set; }

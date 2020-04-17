@@ -3,19 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using FinalProject.Hubs.Classes;
+using Newtonsoft.Json;
 
 namespace SignalRChat.Hubs
 {
     public class ChatHub : Hub
     {
         private static List<User> users = new List<User>();
-        private static List<Card> cards = new List<Card>();
-        private static Dictionary<int, Guid> groupCards = new Dictionary<int, Guid>();
-
-        public async Task SendMessage(string user, string message)
-        {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
-        }
+        private static List<Group> groups = new List<Group>();
 
         public override async Task OnConnectedAsync()
         {
@@ -26,11 +21,42 @@ namespace SignalRChat.Hubs
         {
             users.Add(new User(Context.ConnectionId, username));
             await Clients.Others.SendAsync("addUser", Context.ConnectionId, username);
+            await Clients.Client(Context.ConnectionId).SendAsync("revealCards", JsonConvert.SerializeObject(groups, Formatting.Indented));
         }
 
-        public async Task removeUser(string username)
-        {
+        //[
+        //  {
+        //    "Name": "groupname1",
+        //    [{"cardID": "card1"
+        //     "title": "title1"
+        //     "content": "content1"
+        //    },{
+        //    }]
+        //  },
+        //  {
+        //    "Name": "Product 2",
+        //    "ExpiryDate": "2009-07-31T00:00:00Z",
+        //    "Price": 12.50,
+        //    "Sizes": null
+        //  }
+        //]
 
+        public async Task removeUser()
+        {
+            users.Find(user => user.userID == Context.ConnectionId);
+            await Clients.Others.SendAsync("removeUser", Context.ConnectionId);
+        }
+
+        public async Task addGroup(string groupName)
+        {
+            groups.Add(new Group(groupName));
+            await Clients.Others.SendAsync("addGroup", groupName);
+        }
+
+        public async Task removeGroup(string groupName)
+        {
+            groups.Remove(groups.Find(group => group.name == groupName));
+            await Clients.Others.SendAsync("removeGroup", groupName);
         }
 
         public async Task editCardLock(int cardId)
@@ -38,11 +64,22 @@ namespace SignalRChat.Hubs
             await Clients.Others.SendAsync("lockCard", cardId);
         }
 
-        public async Task addCard(int groupID, string title, string content)
+        public async Task addCard(string groupName, string title, string content)
         {
             Card card = new Card(Context.ConnectionId, title, content);
-            await Clients.Others.SendAsync("UpdateCards", card);
+            groups.Find(group => group.name == groupName).cards.Add(card);
+            await Clients.Others.SendAsync("updateCards", card);
         }
 
+        private class Group
+        {
+            public string name;
+            public List<Card> cards;
+
+            public Group(string name)
+            {
+                this.name = name;
+            }
+        }
     }
 }
