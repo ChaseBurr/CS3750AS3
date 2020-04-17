@@ -35,12 +35,12 @@ input {
     color: white;
 }
 
-    .btn:hover {
-        background: lightblue;
-        color: white;
-    }
+.btn:hover {
+    background: lightblue;
+    color: white;
+}
 
-    .btn:active {
-        background: darkblue;
-        color: white;
-    }
+.btn:active {
+    background: darkblue;
+    color: white;
+}
