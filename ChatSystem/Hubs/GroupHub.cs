@@ -63,6 +63,10 @@ namespace SignalRChat.Hubs
         public async Task addGroup(string groupName)
         {
             groups.Add(new Group(groupName));
+            foreach(Group group in groups)
+            {
+                Console.WriteLine(group.name);
+            }
             await Clients.Others.SendAsync("addGroup", groupName);
         }
 

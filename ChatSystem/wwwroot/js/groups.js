@@ -86,7 +86,7 @@ document.getElementById('AddGroup').addEventListener('click', function (event) {
         GroupList.add(option);
 
         // invoke addGroup function
-        connection.invoke('addGroup', option).catch(function (err) {
+        connection.invoke('addGroup', input).catch(function (err) {
             return console.error(err.toString());
         });
     }
