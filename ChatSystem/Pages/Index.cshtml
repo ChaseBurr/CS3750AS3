@@ -24,66 +24,37 @@
     }
 
 </script>
-
-<link rel="stylesheet" herf="../../css/style.css" />-->
-
-<style>
-    .login {
-        min-width: 300px;
-        max-width: 450px;
-        background: #fff;
-        position: absolute;
-        top: 35%;
-        left: 40%;
-        box-shadow: 0px 2px 5px rgba(0,0,0,.25);
-    }
-
-    h2 {
-        text-align: center;
-    }
-
-    form {
-        display: block;
-        width: 100%;
-        padding: 2em;
-    }
-
-    input {
-        display: block;
-        margin: auto auto;
-        width: 100%;
-        margin-bottom: 2em;
-        padding: .5em 0;
-        border-bottom: 1px solid #eaeaea;
-        padding-bottom: 1.25em;
-        color: #757575;
-    }
-
-    .btn {
-        display: inline-block;
-        background: blue;
-        color: white;
-    }
-
-        .btn:hover {
-            background: lightblue;
-            color: white;
-        }
-
-        .btn:active {
-            background: darkblue;
-            color: white;
-        }
-</style>
-
-<div class="login">
+-->
+<!--- Login Screen -->
+<form class="form" id="loginscreen" style="width: 400px; margin:0 auto; margin-top:200px;">
     <h2>Login</h2>
-    <div id="user">
-        <input type="text" id="username">
-        <button id="username_submit" type="button">Submit</button>
-    </div>
+    <input type="text" class="form-control" id="username">
+    <button class="btn btn-lg btn-primary" style="margin-top:10px;" type="button" id="username_submit">Submit</button>
+</form>
 
+
+<!-- Drop down box for groups -->
+<div class="GroupBox">
+    <select class="form-control" id="group_list" style="display: none; margin-top:50px; width:60%;">
+        <option>Select a group..</option>
+    </select>
+    <button id="ShowGroupInput" type="submit">Add Group</button>
+    <button id="AddGroup"       type="submit">Create Group</button>
+    <input  id="GroupName"      type="text"   class="form-control" style="width:100px;" />
 </div>
+
+
+
+<button id="AddCardButton">Add Card</button>
+
+<!-- Card template -->
+<form id="cards" class="card" style="display: none;">
+    <div class="w3-card" id="card">
+
+    </div>
+    <button type="submit" onclick="UpdateCard('test', 'test1')">Add Item</button>
+</form>
+
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/groups.js"></script>

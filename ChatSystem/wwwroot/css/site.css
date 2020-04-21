@@ -69,3 +69,50 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+.login {
+    min-width: 300px;
+    max-width: 450px;
+    background: #fff;
+    position: absolute;
+    top: 35%;
+    left: 40%;
+    box-shadow: 0px 2px 5px rgba(0,0,0,.25);
+}
+
+h2 {
+    text-align: center;
+}
+
+form {
+    display: block;
+    width: 100%;
+    padding: 2em;
+}
+
+input {
+    display: block;
+    margin: auto auto;
+    width: 100%;
+    margin-bottom: 2em;
+    padding: .5em 0;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 1.25em;
+    color: #757575;
+}
+
+.btn {
+    display: inline-block;
+    background: blue;
+    color: white;
+}
+
+.btn:hover {
+    background: lightblue;
+    color: white;
+}
+
+.btn:active {
+    background: darkblue;
+    color: white;
+}
