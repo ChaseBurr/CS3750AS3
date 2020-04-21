@@ -50,9 +50,10 @@ connection.on("ReceiveMessage", function (user, message) {
 
 // shows 'add group' button and input
 document.getElementById("ShowGroupInput").addEventListener("click", function (event) {
-    document.getElementById('AddCardButton').style.display = 'block';
-    document.getElementById('GroupName').style.display = 'block';
-    document.getElementById('AddGroup').style.display = 'block';
+    document.getElementById('AddCardButton').style.display = 'inline-block';
+    document.getElementById('GroupName').style.display = 'inline-block';
+    document.getElementById('AddGroup').style.display = 'inline-block';
+    document.getElementById('Cancel').style.display = 'inline-block';
     document.getElementById('ShowGroupInput').style.display = 'none';
     event.preventDefault();
 });
@@ -64,7 +65,7 @@ document.getElementById("username_submit").addEventListener("click", function (e
         alert("Please provide a username");
     } else {
         document.getElementById("loginscreen").style.display = "none";
-        document.getElementById('group_list').style.display = 'block';
+        document.getElementById('group_list').style.display = 'inline-block';
         document.getElementById('ShowGroupInput').style.display = 'block';
         connection.invoke("addUser", user).catch(function (err) {
             return console.error(err.toString());
@@ -89,6 +90,11 @@ document.getElementById('AddGroup').addEventListener('click', function (event) {
         connection.invoke('addGroup', input).catch(function (err) {
             return console.error(err.toString());
         });
+
+        document.getElementById('AddGroup').style.display = 'none'
+        document.getElementById('Cancel').style.display = 'none';
+        document.getElementById('GroupName').style.display = 'none';
+        document.getElementById('ShowGroupInput').style.display = 'inline-block';
     }
 
     event.preventDefault();
@@ -97,4 +103,12 @@ document.getElementById('AddGroup').addEventListener('click', function (event) {
 // Add card event
 document.getElementById('cards').addEventListener('click', function (event) {
     document.getElementById('cards').style.display = 'block';
+});
+
+// Cancel group event
+document.getElementById('Cancel').addEventListener('click', function (event) {
+    document.getElementById('AddGroup').style.display = 'none'
+    document.getElementById('Cancel').style.display = 'none';
+    document.getElementById('GroupName').style.display = 'none';
+    document.getElementById('ShowGroupInput').style.display = 'inline-block';
 });
