@@ -88,6 +88,12 @@ namespace SignalRChat.Hubs
             await Clients.Others.SendAsync("updateCards", card);
         }
 
+
+        public async Task UpdateGroups()
+        {
+            await Clients.All.SendAsync("UpdateGroups", groups);
+        }
+
         private class Group
         {
             public string name;
