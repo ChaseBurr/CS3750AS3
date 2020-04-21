@@ -1,7 +1,11 @@
 ﻿"use strict";
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/GroupHub").build();
-connection.start();
+connection.start().then(function () {
+    console.log('Connected.');
+}).catch(function (err) {
+    return console.error(err.toString());
+});
 
 var username = "";
 
@@ -23,12 +27,10 @@ connection.on("sendstuff_2", function (jsonObject) {
 //});
 
 
-//connection.start().then(function () {
-//    document.getElementById("sendButton").disabled = false;
-//}).catch(function (err) {
-//    return console.error(err.toString());
-//});
 
+connection.on("UpdateGroups", function (groups) {
+
+});
 
 //Disable send button until connection is established
 //document.getElementById("sendButton").disabled = true;
