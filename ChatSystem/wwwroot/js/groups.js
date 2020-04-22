@@ -80,10 +80,7 @@ document.getElementById('AddGroup').addEventListener('click', function (event) {
     if (input == '') {
         alert('Add Group Name or click cancel');
     } else {
-        var GroupList = document.getElementById('group_list');
-        var option = document.createElement('option');
-        option.text = input;
-        GroupList.add(option);
+        addGroup(input);
 
         // invoke addGroup function
         connection.invoke('addGroup', input).catch(function (err) {
@@ -92,6 +89,17 @@ document.getElementById('AddGroup').addEventListener('click', function (event) {
     }
 
     event.preventDefault();
+});
+
+function addGroup(groupName) {
+    var GroupList = document.getElementById('group_list');
+    var option = document.createElement('option');
+    option.text = groupName;
+    GroupList.add(option);
+}
+
+connection.on("addGroup", function (groupName) {
+    addGroup(groupName);
 });
 
 // Add card event
