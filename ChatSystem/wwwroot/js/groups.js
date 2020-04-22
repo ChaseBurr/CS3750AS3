@@ -107,38 +107,14 @@ document.getElementById('Cancel').addEventListener('click', function (event) {
 });
 
 // Add card event
+const card = document.getElementById('card_list');
 document.getElementById('AddCardButton').addEventListener('click', (e) => {
-    let groupList = document.getElementById("group_list")
-    let selectedGroup = groupList.options[groupList.selectedIndex].value;
-    console.log(selectedGroup);
-    connection.invoke("addCard", selectedGroup, "testTitle", "testContent").catch(function (err) {
-        return console.error(err.toString());
-    });
-    //document.getElementById('cards').style.display = 'inline-block';
-});
-
-document.getElementById('cards').addEventListener('click', function (event) {
-    document.getElementById('cards').style.display = 'inline-block';
-});
-
-connection.on("addCard", function (card) {
-    //let newCard = JSON.parse(card);
-    console.log(card);
-});
-
-
-//--// End of event listeners //--//
-
-
-
-function CreateCard() {
     let new_card = document.createElement('div');
     new_card.addEventListener('click', (e_ => {
         new_card.style.background = 'pink';
     }));
     new_card.className = 'card_layout';
 
-    let card = document.getElementById('cards');
 
     let input_title = document.createElement('input');
     input_title.type = 'text';
@@ -153,10 +129,29 @@ function CreateCard() {
     let label = document.createElement('label');
     label.for = 'checkbox';
 
-    card.appendChild(input_title);
-    card.appendChild(input_content);
-    card.appendChild(checkbox);
-    card.appendChild(label);
-    new_card.appendChild(card);
+    new_card.appendChild(input_title);
+    new_card.appendChild(input_content);
+    new_card.appendChild(checkbox);
+    new_card.appendChild(label);
+    card.appendChild(new_card);
 
-}
+    //card.innerHTML += '<a> </a>'
+
+    let groupList = document.getElementById("group_list")
+    let selectedGroup = groupList.options[groupList.selectedIndex].value;
+    connection.invoke("addCard", selectedGroup, "testTitle", "testContent").catch(function (err) {
+        return console.error(err.toString());
+    });
+
+});
+
+connection.on("addCard", function (card) {
+    //let newCard = JSON.parse(card);
+    console.log(card);
+});
+
+
+//--// End of event listeners //--//
+
+
+

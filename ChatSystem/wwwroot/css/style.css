@@ -45,7 +45,7 @@ input {
     color: white;
 }
 
-#group_list, #group, #ShowGroupInput, #GroupName, #AddCardButton, #Cancel, #cards {
+#group_list, #group, #ShowGroupInput, #GroupName, #AddCardButton, #Cancel {
     display: none;
 }
 
@@ -58,6 +58,11 @@ input {
     height: 300px;
     border: 1px solid black;
     padding: 5px;
+    display:inline-block;
+}
+
+#card_list {
+    display: inline-block;
 }
 
 
