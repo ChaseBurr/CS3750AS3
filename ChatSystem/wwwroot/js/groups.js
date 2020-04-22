@@ -27,32 +27,23 @@ connection.on("sendstuff_2", function (jsonObject) {
     //alert("sendstuff_2 - paramData is: " + JSON.stringify(jsonObject));  
 });
 
-//connection.on("updateCards", funciton (CardData) {
-//    alert(CardData);
-//});
+connection.on("updateCards", funciton (CardData) {
+    alert(CardData);
+});
 
 // end of brad stuff
 
-//--// On connection functions //--//
 
+
+//--// On connection functions //--//
 
 connection.on("UpdateGroups", (groups) => {
     groups.forEach(element => GroupList.push(groups));
     console.log('Group list Updated');
 });
 
-//Disable send button until connection is established
-//document.getElementById("sendButton").disabled = true;
-
-connection.on("ReceiveMessage", function (user, message) {
-    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    var encodedMsg = user + " says " + msg;
-    var li = document.createElement("li");
-    li.textContent = encodedMsg;
-    document.getElementById("messagesList").appendChild(li);
-});
-
 //--// End of connection functions //--//
+
 
 
 //--// Event listeners //--//
@@ -95,11 +86,7 @@ document.getElementById('AddGroup').addEventListener('click', function (event) {
     if (input == '') {
         alert('Add Group Name or click cancel');
     } else {
-        var GroupList = document.getElementById('group_list');
-        var option = document.createElement('option');
-        option.text = input;
-        GroupList.add(option);
-
+        addGroup(input);
 
         // invoke addGroup function
         connection.invoke("addGroup", input).catch(function (err) {
@@ -115,6 +102,17 @@ document.getElementById('AddGroup').addEventListener('click', function (event) {
     }
 
     event.preventDefault();
+});
+
+function addGroup(groupName) {
+    var GroupList = document.getElementById('group_list');
+    var option = document.createElement('option');
+    option.text = groupName;
+    GroupList.add(option);
+}
+
+connection.on("addGroup", function (groupName) {
+    addGroup(groupName);
 });
 
 // Add card event
