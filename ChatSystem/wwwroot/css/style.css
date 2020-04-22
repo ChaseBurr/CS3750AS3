@@ -18,7 +18,7 @@ form {
     padding: 2em;
 }
 
-input {
+.input {
     display: block;
     margin: auto auto;
     width: 100%;
@@ -56,9 +56,10 @@ input {
 .card_layout {
     width: 250px;
     height: 300px;
-    border: 1px solid black;
     padding: 5px;
-    display:inline-block;
+    border: 1px solid black;
+    display: inline-block;
+    margin-right: 5px;
 }
 
 #card_list {
@@ -73,5 +74,6 @@ input {
 input[type=checkbox] {
     width: 10px;
     margin: 0;
+    margin-right: 10px;
     display: inline-block;
 }
