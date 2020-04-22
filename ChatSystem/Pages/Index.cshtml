@@ -18,16 +18,18 @@
     <input id="GroupName" type="text" class="form-control" style="width:100px;" />
 </div>
 
-<button id="AddCardButton">Add Card</button>
+<button id="AddCardButton" onclick="CreateCard()">Add Card</button>
 
 <!-- Card template -->
 <form id="cards" class="card">
-    <div class="card_layout">
+    <!--
+    <div class="card_layout" id="card1">
         <input type="text" id="title" placeholder="  title goes here." />
         <input type="text" id="card_content" placeholder="  content here. "/>
-        <input type="checkbox" id="checkbox visible_checkbox" name="visible_text" />
-        <label for="v" id="checkbox visible_text">Visible</label>
+        <input type="checkbox" id="checkbox visible_text" name="visible_text" />
+        <label for="visible_text" style="margin: .4em;">Visible</label>
     </div>
+        -->
     <button type="submit" id="insert_card">Add Card</button>
 </form>
 
@@ -38,27 +40,25 @@
 
 <!--
 document.getElementById('cards').style.display = 'inline-block';
-
-
 -->
 
 <script>
-    function CreateCard() {
+    //function CreateCard() {
 
-        let new_card;
-        card.addEventListener('click', (e) {
+    //    let new_card;
+    //    //card.addEventListener('click', (e) => {
 
-        });
+    //    //});
 
-        var card = document.getElementById('cards');
-        var new_card1 = document.createElement('div');
-        new_card.className = 'card_layout';
-        var input_title = document.createElement('input');
-        input_title.type = 'text';
-        var input_content = document.createElement('input');
-        input_content.type = 'text';
-        var checkbox = document.createElement('input');
+    //    var card = document.getElementById('cards');
+    //    var new_card1 = document.createElement('div');
+    //    new_card.className = 'card_layout';
+    //    var input_title = document.createElement('input');
+    //    input_title.type = 'text';
+    //    var input_content = document.createElement('input');
+    //    input_content.type = 'text';
+    //    var checkbox = document.createElement('input');
 
-        card.appendChild(new_card);
-    }
+    //    card.appendChild(new_card);
+    //}
 </script>

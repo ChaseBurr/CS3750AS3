@@ -64,3 +64,9 @@ input {
 #checkbox {
     display: inline-block;
 }
+
+input[type=checkbox] {
+    width: 10px;
+    margin: 0;
+    display: inline-block;
+}

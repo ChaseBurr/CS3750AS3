@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 // build connection
-var connection = new signalR.HubConnectionBuilder().withUrl("/GroupHub").build();
+let connection = new signalR.HubConnectionBuilder().withUrl("/GroupHub").build();
 
 connection.start().then(function () {
     console.log('Connected.');
@@ -9,9 +9,9 @@ connection.start().then(function () {
     return console.error(err.toString());
 });
 
-// Variables
-var username = "";
-var GroupList = [];
+// letiables
+let username = "";
+let GroupList = [];
 // end of brad stuff
 
 
@@ -36,12 +36,13 @@ document.getElementById("ShowGroupInput").addEventListener("click", function (ev
     document.getElementById('AddGroup').style.display = 'inline-block';
     document.getElementById('Cancel').style.display = 'inline-block';
     document.getElementById('ShowGroupInput').style.display = 'none';
+    document.getElementById('GroupName').value = "";
     event.preventDefault();
 });
 
 // Login event
 document.getElementById("username_submit").addEventListener("click", function (event) {
-    var user = document.getElementById("username").value;
+    let user = document.getElementById("username").value;
 
     if (user === "") {
         alert("Please provide a username");
@@ -62,7 +63,7 @@ document.getElementById("username_submit").addEventListener("click", function (e
 
 // create group event
 document.getElementById('AddGroup').addEventListener('click', function (event) {
-    var input = document.getElementById('GroupName').value;
+    let input = document.getElementById('GroupName').value;
 
     if (input == '') {
         alert('Add Group Name or click cancel');
@@ -75,6 +76,7 @@ document.getElementById('AddGroup').addEventListener('click', function (event) {
         });
 
         console.log('Group Added.');
+        document.getElementById('group_list').value = document.getElementById('GroupName').value;
 
         document.getElementById('AddGroup').style.display = 'none'
         document.getElementById('Cancel').style.display = 'none';
@@ -86,33 +88,14 @@ document.getElementById('AddGroup').addEventListener('click', function (event) {
 });
 
 function addGroup(groupName) {
-    var GroupList = document.getElementById('group_list');
-    var option = document.createElement('option');
+    let GroupList = document.getElementById('group_list');
+    let option = document.createElement('option');
     option.text = groupName;
     GroupList.add(option);
 }
 
 connection.on("addGroup", function (groupName) {
     addGroup(groupName);
-});
-
-// Add card event
-document.getElementById('AddCardButton').addEventListener('click', (e) => {
-    let groupList = document.getElementById("group_list")
-    let selectedGroup = groupList.options[groupList.selectedIndex].value;
-    console.log(selectedGroup);
-    connection.invoke("addCard", selectedGroup, "testTitle", "testContent").catch(function (err) {
-        return console.error(err.toString());
-    });
-});
-
-document.getElementById('cards').addEventListener('click', function (event) {
-    document.getElementById('cards').style.display = 'block';
-});
-
-connection.on("addCard", function (card) {
-    //let newCard = JSON.parse(card);
-    console.log(card);
 });
 
 // Cancel group event
@@ -123,6 +106,57 @@ document.getElementById('Cancel').addEventListener('click', function (event) {
     document.getElementById('ShowGroupInput').style.display = 'inline-block';
 });
 
+// Add card event
+document.getElementById('AddCardButton').addEventListener('click', (e) => {
+    let groupList = document.getElementById("group_list")
+    let selectedGroup = groupList.options[groupList.selectedIndex].value;
+    console.log(selectedGroup);
+    connection.invoke("addCard", selectedGroup, "testTitle", "testContent").catch(function (err) {
+        return console.error(err.toString());
+    });
+    //document.getElementById('cards').style.display = 'inline-block';
+});
+
+document.getElementById('cards').addEventListener('click', function (event) {
+    document.getElementById('cards').style.display = 'inline-block';
+});
+
+connection.on("addCard", function (card) {
+    //let newCard = JSON.parse(card);
+    console.log(card);
+});
+
+
 //--// End of event listeners //--//
 
 
+
+function CreateCard() {
+    let new_card = document.createElement('div');
+    new_card.addEventListener('click', (e_ => {
+        new_card.style.background = 'pink';
+    }));
+    new_card.className = 'card_layout';
+
+    let card = document.getElementById('cards');
+
+    let input_title = document.createElement('input');
+    input_title.type = 'text';
+
+    let input_content = document.createElement('input');
+    input_content.type = 'text';
+
+    let checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.name = 'checkbox';
+
+    let label = document.createElement('label');
+    label.for = 'checkbox';
+
+    card.appendChild(input_title);
+    card.appendChild(input_content);
+    card.appendChild(checkbox);
+    card.appendChild(label);
+    new_card.appendChild(card);
+
+}
