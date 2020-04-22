@@ -45,7 +45,7 @@ input {
     color: white;
 }
 
-#group_list, #group, #ShowGroupInput, #GroupName, #AddCardButton {
+#group_list, #group, #ShowGroupInput, #GroupName, #AddCardButton, #Cancel {
     display: none;
 }
 
