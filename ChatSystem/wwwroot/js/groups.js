@@ -12,25 +12,6 @@ connection.start().then(function () {
 // Variables
 var username = "";
 var GroupList = [];
-
-// brad stuff
-connection.on("sendstuff_raw_text", function (paramData) {
-    //alert("sendstuff_raw_text - paramData is: " + paramData);
-});
-
-connection.on("sendstuff_1", function (jsonObject) {
-    //alert("sendstuff_1 - paramData is: " + JSON.stringify(jsonObject));  
-});
-
-
-connection.on("sendstuff_2", function (jsonObject) {
-    //alert("sendstuff_2 - paramData is: " + JSON.stringify(jsonObject));  
-});
-
-connection.on("updateCards", funciton (CardData) {
-    alert(CardData);
-});
-
 // end of brad stuff
 
 
@@ -116,8 +97,22 @@ connection.on("addGroup", function (groupName) {
 });
 
 // Add card event
+document.getElementById('AddCardButton').addEventListener('click', (e) => {
+    let groupList = document.getElementById("group_list")
+    let selectedGroup = groupList.options[groupList.selectedIndex].value;
+    console.log(selectedGroup);
+    connection.invoke("addCard", selectedGroup, "testTitle", "testContent").catch(function (err) {
+        return console.error(err.toString());
+    });
+});
+
 document.getElementById('cards').addEventListener('click', function (event) {
     document.getElementById('cards').style.display = 'block';
+});
+
+connection.on("addCard", function (card) {
+    //let newCard = JSON.parse(card);
+    console.log(card);
 });
 
 // Cancel group event
@@ -129,3 +124,5 @@ document.getElementById('Cancel').addEventListener('click', function (event) {
 });
 
 //--// End of event listeners //--//
+
+

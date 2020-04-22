@@ -5,18 +5,17 @@ namespace FinalProject.Hubs.Classes
 {
     internal class Card
     {
-
         
         private bool visible;
 
         [JsonProperty("cardID")]
-        private Guid cardID { get; set; }
+        public Guid cardID { get; set; }
 
         [JsonProperty("userID")]
         public string userID { get; set; }
 
         [JsonProperty("editable")]
-        private bool editable { get; set; }
+        public bool editable { get; set; }
 
         [JsonProperty("title")]
         public string title { get; set; }

@@ -84,8 +84,12 @@ namespace SignalRChat.Hubs
         public async Task addCard(string groupName, string title, string content)
         {
             Card card = new Card(Context.ConnectionId, title, content);
-            groups.Find(group => group.name == groupName).cards.Add(card);
-            await Clients.Others.SendAsync("updateCards", card);
+            Group group = groups.Find(group => group.name == groupName);
+            if(group != null)
+            {
+                group.cards.Add(card);
+            }
+            await Clients.Others.SendAsync("addCard", card);
         }
 
 
@@ -96,13 +100,16 @@ namespace SignalRChat.Hubs
 
         private class Group
         {
-            public string name;
+            public string name {
+                get; set;
+            }
             public List<Card> cards;
 
             public Group(string name)
             {
                 this.name = name;
+                this.cards = new List<Card>();
             }
-        }
+    }
     }
 }
