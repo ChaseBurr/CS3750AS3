@@ -1,30 +1,4 @@
 ﻿@page
-<!--<main>
-        <div id="cards">
-            <div id="">
-                <h1>
-
-                </h1>
-                <article>
-
-                </article>
-            </div>
-        </div>
-    </main>
-<script src="~/js/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/chat.js"></script>
-<script>
-
-    let cards = document.getElementById('cards');
-
-    connection.on("UpdateCard", (title, content) => {
-        let card = cards.getElementById('cardID');
-        card.querySelector('h1').innerHTML = title;
-        card.querySelector('article').innerHTML = content;
-    }
-
-</script>
--->
 <!--- Login Screen -->
 <form class="form" id="loginscreen" style="width: 400px; margin:0 auto; margin-top:200px;">
     <h2>Login</h2>
@@ -39,21 +13,22 @@
         <option>Select a group..</option>
     </select>
     <button id="ShowGroupInput" type="submit" class="btn">Add Group</button>
-    <button id="AddGroup"       type="submit" class="btn">Create Group</button>
-    <button id="Cancel"         type="submit" class="btn">Cancel</button>
-    <input  id="GroupName"      type="text"   class="form-control" style="width:100px;" />
+    <button id="AddGroup" type="submit" class="btn">Create Group</button>
+    <button id="Cancel" type="submit" class="btn">Cancel</button>
+    <input id="GroupName" type="text" class="form-control" style="width:100px;" />
 </div>
-
-
 
 <button id="AddCardButton">Add Card</button>
 
 <!-- Card template -->
-<form id="cards" class="card" style="display: none;">
-    <div class="w3-card" id="card">
-
+<form id="cards" class="card">
+    <div class="card_layout">
+        <input type="text" id="title" placeholder="  title goes here." />
+        <input type="text" id="card_content" placeholder="  content here. "/>
+        <input type="checkbox" id="checkbox visible_checkbox" name="visible_text" />
+        <label for="v" id="checkbox visible_text">Visible</label>
     </div>
-    <button type="submit" onclick="UpdateCard('test', 'test1')">Add Item</button>
+    <button type="submit" id="insert_card">Add Card</button>
 </form>
 
 
@@ -61,3 +36,29 @@
 <script src="~/js/groups.js"></script>
 
 
+<!--
+document.getElementById('cards').style.display = 'inline-block';
+
+
+-->
+
+<script>
+    function CreateCard() {
+
+        let new_card;
+        card.addEventListener('click', (e) {
+
+        });
+
+        var card = document.getElementById('cards');
+        var new_card1 = document.createElement('div');
+        new_card.className = 'card_layout';
+        var input_title = document.createElement('input');
+        input_title.type = 'text';
+        var input_content = document.createElement('input');
+        input_content.type = 'text';
+        var checkbox = document.createElement('input');
+
+        card.appendChild(new_card);
+    }
+</script>

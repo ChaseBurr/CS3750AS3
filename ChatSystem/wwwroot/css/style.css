@@ -45,7 +45,7 @@ input {
     color: white;
 }
 
-#group_list, #group, #ShowGroupInput, #GroupName, #AddCardButton, #Cancel {
+#group_list, #group, #ShowGroupInput, #GroupName, #AddCardButton, #Cancel, #cards {
     display: none;
 }
 
@@ -53,13 +53,14 @@ input {
     display:none;
 }
 
-.cards {
-    display: none;
-}
-
-.card .cards {
-    width: 150px;
-    height: 200px;
+.card_layout {
+    width: 250px;
+    height: 300px;
     border: 1px solid black;
     padding: 5px;
+}
+
+
+#checkbox {
+    display: inline-block;
 }
