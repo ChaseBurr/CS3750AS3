@@ -145,13 +145,18 @@ document.getElementById('AddCardButton').addEventListener('click', (e) => {
 // selection change event
 document.getElementById('group_list').addEventListener('change', (event) => {
     event.preventDefault();
-    let test = document.getElementById('group_list').value;
+    document.getElementById('AddCardButton').style.display = 'inline-block';
+    let val = document.getElementById('group_list').value;
+    let a = document.querySelectorAll('div[data-group-name]');
 
-    if (test == "Select a group..") {
+    if (val == "Select a group..") {
+        //document.querySelectorAll('div[data-group-name]').style.display = 'none';
+        a.forEach(element => { element.style.display = 'none' });
         console.log('No group selected');
     } else {
-        console.log(test);
-        document.getElementById('AddCardButton').style.display = 'inline-block';
+        a.forEach(element => { element.style.display = 'none' });
+        document.querySelector('div[data-group-name=' + val + ']').style.display = 'inline-block';
+        console.log(val);
     }
 
 });
@@ -162,7 +167,7 @@ document.getElementById('group_list').addEventListener('change', (event) => {
 
 
 
-
+// display editable html card
 function CreateCardHTML(group_name) {
     // new card
     let new_card = document.createElement('form');
@@ -193,6 +198,14 @@ function CreateCardHTML(group_name) {
     label.for = 'checkbox';
     label.textContent = 'Visible';
 
+    let locked = document.createElement('input');
+    locked.type = 'checkbox';
+    locked.name = 'lockable';
+
+    let lockedlabel = document.createElement('label');
+    lockedlabel.for = 'lockable';
+    lockedlabel.textContent = 'Lock';
+
     // button for submitting content
     let button = document.createElement('input');
     button.type = 'submit';
@@ -221,6 +234,9 @@ function CreateCardHTML(group_name) {
     new_card.appendChild(input_content);
     new_card.appendChild(checkbox);
     new_card.appendChild(label);
+    new_card.appendChild(document.createElement('br'));
+    new_card.appendChild(locked);
+    new_card.appendChild(lockedlabel);
     new_card.appendChild(button);
     card.appendChild(new_card);
     group.appendChild(new_card);
@@ -245,6 +261,7 @@ function SendData(form) {
     console.log('Updated Card.');
 }
 
+// update card html to new format
 function UpdateCardHTML(card_json, groupName) {
     let cardID = card_json.cardID;
 
@@ -266,6 +283,14 @@ function UpdateCardHTML(card_json, groupName) {
     label.for = 'checkbox';
     label.textContent = 'Visible';
 
+    let locked = document.createElement('input');
+    locked.type = 'checkbox';
+    locked.name = 'lockable';
+
+    let lockedlabel = document.createElement('label');
+    lockedlabel.for = 'lockable';
+    lockedlabel.textContent = 'Lock';
+
 
     let edit_button = document.createElement('input');
     edit_button.type = 'submit';
@@ -283,14 +308,12 @@ function UpdateCardHTML(card_json, groupName) {
     new_card.appendChild(content_body);
     new_card.appendChild(checkbox);
     new_card.appendChild(label);
+    new_card.appendChild(document.createElement('br'));
+    new_card.appendChild(locked);
+    new_card.appendChild(lockedlabel);
     new_card.appendChild(edit_button);
     //card.appendChild(new_card);
     let group = card.querySelector('div[data-group-name=' + groupName + "]")
     group.appendChild(new_card);
-
-    // hide add button
 }
 
-function RemoveOldHTML() {
-
-}
