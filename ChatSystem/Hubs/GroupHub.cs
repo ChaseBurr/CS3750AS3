@@ -9,7 +9,6 @@ namespace SignalRChat.Hubs
 {
     public class GroupHub : Hub
     {
-        private static List<Card> cards = new List<Card>();
         private static List<User> users = new List<User>();
         private static List<Group> groups = new List<Group>();
 
@@ -27,6 +26,7 @@ namespace SignalRChat.Hubs
         public override async Task OnConnectedAsync()
         {
             await Clients.Client(Context.ConnectionId).SendAsync("showUsernameForm");
+            await Clients.Client(Context.ConnectionId).SendAsync("addGroup", JsonConvert.SerializeObject(groups, Formatting.Indented)); // update groups and cards to new user
         }
 
         public async Task addUser(string username)
@@ -35,7 +35,6 @@ namespace SignalRChat.Hubs
             {
                 users.Add(new User(Context.ConnectionId, username));
                 await Clients.Others.SendAsync("addUser", Context.ConnectionId, username); // add user to eveyone elses list of users
-                await Clients.Client(Context.ConnectionId).SendAsync("addGroup", JsonConvert.SerializeObject(groups, Formatting.Indented)); // update groups and cards to new user
             }
             else await Clients.Client(Context.ConnectionId).SendAsync("error", "User Already Exists");
         }
@@ -93,8 +92,8 @@ namespace SignalRChat.Hubs
             if(group != null)
             {
                 group.cards.Add(card);
+                await Clients.All.SendAsync("addCard", card, groupName);
             }
-            await Clients.Others.SendAsync("addCard", card);
         }
 
         private class Group
