@@ -12,6 +12,7 @@ connection.start().then(function () {
 // letiables
 let username = "";
 let GroupList = [];
+let groupdata;
 
 
 //--// On connection functions //--//
@@ -59,6 +60,12 @@ document.getElementById("username_submit").addEventListener("click", function (e
     }
     event.preventDefault();
 }); 
+
+connection.on("revealCards", (groups) => {
+    // updates new user with groups and cards
+    groupdata = JSON.parse(groups);
+    groupdata.forEach(group => addGroup(group.name));
+});
 
 // create group event
 document.getElementById('AddGroup').addEventListener('click', function (event) {
@@ -152,7 +159,7 @@ document.getElementById('AddCardButton').addEventListener('click', (e) => {
     let button = document.createElement('input');
     button.type = 'submit';
     button.id = 'CardSubmitButton' + card_count;
-    button.onsubmit = fuction(this) { }
+    //button.onsubmit = fuction(this) { }
     button.getElementById = 'CardInputCheck';
     button.className = 'btn';
     button.textContent = 'Add';

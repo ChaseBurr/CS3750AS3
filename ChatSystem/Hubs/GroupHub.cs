@@ -16,13 +16,12 @@ namespace SignalRChat.Hubs
         public async Task Login(string username)
         {
             Context.Items["username"] = username;
+            await addUser(username);
 
-
-            await Clients.Caller.SendAsync("sendstuff_raw_text", "hello!");
-
-            cards.Add(new Card("some_userID", "some_title", "some content"));
-            await Clients.Caller.SendAsync("sendstuff_1", cards);
-            await Clients.Caller.SendAsync("sendstuff_2", users);
+            //await Clients.Caller.SendAsync("sendstuff_raw_text", "hello!");
+            //cards.Add(new Card("some_userID", "some_title", "some content"));
+            //await Clients.Caller.SendAsync("sendstuff_1", cards);
+            //await Clients.Caller.SendAsync("sendstuff_2", users);
         }
 
         public override async Task OnConnectedAsync()
@@ -32,9 +31,13 @@ namespace SignalRChat.Hubs
 
         public async Task addUser(string username)
         {
-            users.Add(new User(Context.ConnectionId, username));
-            await Clients.Others.SendAsync("addUser", Context.ConnectionId, username);
-            await Clients.Client(Context.ConnectionId).SendAsync("revealCards", JsonConvert.SerializeObject(groups, Formatting.Indented));
+            if (users.Find(user => user.username == username) == null)
+            {
+                users.Add(new User(Context.ConnectionId, username));
+                await Clients.Others.SendAsync("addUser", Context.ConnectionId, username); // add user to eveyone elses list of users
+                await Clients.Client(Context.ConnectionId).SendAsync("addGroup", JsonConvert.SerializeObject(groups, Formatting.Indented)); // update groups and cards to new user
+            }
+            else await Clients.Client(Context.ConnectionId).SendAsync("error", "User Already Exists");
         }
 
         //[
