@@ -92,8 +92,10 @@ namespace SignalRChat.Hubs
             if(group != null)
             {
                 group.cards.Add(card);
-                await Clients.All.SendAsync("addCard", card, groupName);
+                await Clients.All.SendAsync("addCard", JsonConvert.SerializeObject(card, Formatting.Indented), groupName);
+                Console.WriteLine("it hit me 2");
             }
+            Console.WriteLine("it hit me");
         }
 
         private class Group
