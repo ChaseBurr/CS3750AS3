@@ -23,6 +23,19 @@ connection.on("UpdateGroups", (groups) => {
     console.log('Group list Updated');
 });
 
+// asyncronously adds group to selection list from other user
+connection.on("addGroup", function (newGroupsJson) {
+    // json array of group names
+    let newGroups = JSON.parse(newGroupsJson);
+    console.log(newGroups);
+    newGroups.forEach(group => addGroup(group.name));
+});
+
+connection.on("addCard", function (card) {
+    let newCard = JSON.parse(card);
+    console.log(newCard);
+});
+
 //--// End of connection functions //--//
 
 // alert error function
@@ -75,12 +88,11 @@ document.getElementById('AddGroup').addEventListener('click', function (event) {
         });
 
         console.log('Group Added.');
-        document.getElementById('group_list').value = document.getElementById('GroupName').value;
+        document.getElementById('group_list').value = input;
 
         document.getElementById('AddGroup').style.display = 'none'
         document.getElementById('Cancel').style.display = 'none';
         document.getElementById('GroupName').style.display = 'none';
-        document.getElementById('AddCardButton').style.display = 'inline-block';
         document.getElementById('ShowGroupInput').style.display = 'inline-block';
     }
 
@@ -95,14 +107,6 @@ function addGroup(groupName) {
     GroupList.add(option);
 }
 
-// asyncronously adds group to selection list from other user
-connection.on("addGroup", function (newGroupsJson) {
-    // json array of group names
-    let newGroups = JSON.parse(newGroupsJson);
-    console.log(newGroups);
-    newGroups.forEach(group => addGroup(group.name));
-});
-
 // Cancel group event
 document.getElementById('Cancel').addEventListener('click', function (event) {
     document.getElementById('AddGroup').style.display = 'none'
@@ -114,6 +118,7 @@ document.getElementById('Cancel').addEventListener('click', function (event) {
 // Add card event
 const card = document.getElementById('card_list');
 
+// adds card to screen
 document.getElementById('AddCardButton').addEventListener('click', (e) => {
 
     // new card
@@ -163,6 +168,7 @@ document.getElementById('AddCardButton').addEventListener('click', (e) => {
     button.addEventListener('click', (event) => {
         event.preventDefault();
         SendData(new_card);
+        document.getElementById('AddCardButton').style.display = 'inline-block';
         input_title.style.display = 'none';
         input_content.style.display = 'none';
         button.style.display = 'none';
@@ -188,11 +194,28 @@ document.getElementById('AddCardButton').addEventListener('click', (e) => {
 
 });
 
-connection.on("addCard", function (card) {
-    let newCard = JSON.parse(card);
-    console.log(newCard);
+
+// selection change event
+document.getElementById('group_list').addEventListener('change', (event) => {
+    event.preventDefault();
+    let test = document.getElementById('group_list').value;
+
+    if (test == "Select a group..") {
+        console.log('Removed cards');
+    } else {
+        console.log(test);
+        document.getElementById('AddCardButton').style.display = 'inline-block';
+        // render cards from server
+    }
+
 });
 
+
+
+//--// End of event listeners //--//
+
+
+// grabs the input data and sends it to the server
 function SendData(form) {
     title = form.querySelector("input[name='title'").value;
     content = form.querySelector("input[name='content'").value;
@@ -201,18 +224,10 @@ function SendData(form) {
     let selectedGroup = groupList.options[groupList.selectedIndex].value;
 
 
-    console.log(title, content, visible);
-    document.getElementById('AddCardButton').style.display = 'inline-block';
-
     // send to server
     connection.invoke("addCard", selectedGroup, title, content).catch(function (err) {
         return console.error(err.toString());
     });
+    console.log(title, content, visible);
 }
-
-
-
-//--// End of event listeners //--//
-
-
 
