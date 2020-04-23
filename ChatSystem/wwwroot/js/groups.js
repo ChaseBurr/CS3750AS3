@@ -23,6 +23,8 @@ connection.on("UpdateGroups", (groups) => {
 
 //--// End of connection functions //--//
 
+// alert error function
+connection.on("error", (error) => { window.alert(error); });
 
 
 //--// Event listeners //--//
@@ -65,8 +67,6 @@ document.getElementById('AddGroup').addEventListener('click', function (event) {
     if (input == '') {
         alert('Add Group Name or click cancel');
     } else {
-        addGroup(input);
-
         // invoke addGroup function
         connection.invoke("addGroup", input).catch(function (err) {
             return console.error(err.toString());
@@ -78,13 +78,14 @@ document.getElementById('AddGroup').addEventListener('click', function (event) {
         document.getElementById('AddGroup').style.display = 'none'
         document.getElementById('Cancel').style.display = 'none';
         document.getElementById('GroupName').style.display = 'none';
-    document.getElementById('AddCardButton').style.display = 'inline-block';
+        document.getElementById('AddCardButton').style.display = 'inline-block';
         document.getElementById('ShowGroupInput').style.display = 'inline-block';
     }
 
     event.preventDefault();
 });
 
+// adds group to list of groups on server
 function addGroup(groupName) {
     let GroupList = document.getElementById('group_list');
     let option = document.createElement('option');
@@ -92,8 +93,12 @@ function addGroup(groupName) {
     GroupList.add(option);
 }
 
-connection.on("addGroup", function (groupName) {
-    addGroup(groupName);
+// asyncronously adds group to selection list from other user
+connection.on("addGroup", function (newGroupsJson) {
+    // json array of group names
+    let newGroups = JSON.parse(newGroupsJson);
+    console.log(newGroups);
+    newGroups.forEach(group => addGroup(group.name));
 });
 
 // Cancel group event
@@ -147,6 +152,7 @@ document.getElementById('AddCardButton').addEventListener('click', (e) => {
     let button = document.createElement('input');
     button.type = 'submit';
     button.id = 'CardSubmitButton' + card_count;
+    button.onsubmit = fuction(this) { }
     button.getElementById = 'CardInputCheck';
     button.className = 'btn';
     button.textContent = 'Add';
@@ -156,6 +162,7 @@ document.getElementById('AddCardButton').addEventListener('click', (e) => {
 
     // event listener for the inner button
     button.addEventListener('click', (e) => {
+        
         title = document.getElementById('title_text' + card_count).value;
         content = document.getElementById('conent_text' + card_count).value;
         document.removeChild(document.getElementById('title_text' + card_count));

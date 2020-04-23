@@ -62,12 +62,14 @@ namespace SignalRChat.Hubs
 
         public async Task addGroup(string groupName)
         {
-            groups.Add(new Group(groupName));
-            foreach(Group group in groups)
+            if (groups.Find(group => group.name == groupName) == null)
             {
-                Console.WriteLine(group.name);
+                Group newGroup = new Group(groupName);
+                groups.Add(newGroup);
+                Group[] newGroups = { newGroup };
+                await Clients.All.SendAsync("addGroup", JsonConvert.SerializeObject(newGroups, Formatting.Indented));
             }
-            await Clients.Others.SendAsync("addGroup", groupName);
+            else await Clients.Client(Context.ConnectionId).SendAsync("error", "Group Already Exists");
         }
 
         public async Task removeGroup(string groupName)
@@ -90,12 +92,6 @@ namespace SignalRChat.Hubs
                 group.cards.Add(card);
             }
             await Clients.Others.SendAsync("addCard", card);
-        }
-
-
-        public async Task UpdateGroups()
-        {
-            await Clients.All.SendAsync("UpdateGroups", groups);
         }
 
         private class Group
