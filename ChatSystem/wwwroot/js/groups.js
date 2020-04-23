@@ -11,6 +11,8 @@ connection.start().then(function () {
 
 // letiables
 let username = "";
+let title = "";
+let content = "";
 let GroupList = [];
 
 
@@ -111,64 +113,66 @@ document.getElementById('Cancel').addEventListener('click', function (event) {
 
 // Add card event
 const card = document.getElementById('card_list');
-let card_count = 0;
+
 document.getElementById('AddCardButton').addEventListener('click', (e) => {
-    let new_card = document.createElement('div');
+
+    // new card
+    let new_card = document.createElement('form');
     new_card.className = 'card_layout';
-    new_card.id = 'Card_' + card_count;
 
-    // event listener for when the div is clicked (might not need)
-    new_card.addEventListener('click', (e_ => {
-        new_card.style.background = 'pink';
-    }));
-
+    // card styling
     card.style.border = '1px solid black';
 
     // title input
     let input_title = document.createElement('input');
-    input_title.id = 'title_text' + card_count;
-    input_title.type = 'text';
     input_title.placeholder = 'Title goes here..';
+    input_title.name = 'title';
+    input_title.type = 'text';
 
     // content input
     let input_content = document.createElement('input');
-    input_content.type = 'text';
     input_content.placeholder = 'Content goes here..';
-    input_content.id = 'conent_text' + card_count;
+    input_content.name = 'content';
+    input_content.type = 'text';
 
     // checkbox
     let checkbox = document.createElement('input');
-    checkbox.id = 'CheckBoxOption' + card_count;
-    checkbox.type = 'checkbox';
     checkbox.name = 'checkbox';
+    checkbox.type = 'checkbox';
 
     // label for checkbox
     let label = document.createElement('label');
-    label.id = 'Visible_' + card_count;
     label.for = 'checkbox';
     label.textContent = 'Visible';
 
     // button for submitting content
     let button = document.createElement('input');
     button.type = 'submit';
-    button.id = 'CardSubmitButton' + card_count;
-    button.onsubmit = fuction(this) { }
-    button.getElementById = 'CardInputCheck';
     button.className = 'btn';
-    button.textContent = 'Add';
+    button.value = 'Add';
 
-    let title = "default text";
-    let content = "default text";
+    let edit_button = document.createElement('input');
+    edit_button.type = 'submit';
+    edit_button.className = 'btn';
+    edit_button.value = 'Edit';
+
+    let Title_header = document.createElement('h3');
+    let content_body = document.createElement('p');
 
     // event listener for the inner button
-    button.addEventListener('click', (e) => {
-        
-        title = document.getElementById('title_text' + card_count).value;
-        content = document.getElementById('conent_text' + card_count).value;
-        document.removeChild(document.getElementById('title_text' + card_count));
-        document.removeChild(document.getElementById('content_text' + card_count));
-        document.removeChild(document.getElementById('CardSubmitButton' + card_count));
-        document.getElementById('AddCardButton').style.display = 'inline-block';
+    button.addEventListener('click', (event) => {
+        event.preventDefault();
+        SendData(new_card);
+        input_title.style.display = 'none';
+        input_content.style.display = 'none';
+        button.style.display = 'none';
+        Title_header.textContent = title;
+        content_body.textContent = content;
+        new_card.appendChild(document.createElement('hr'));
+        new_card.appendChild(Title_header);
+        new_card.appendChild(document.createElement('hr'));
+        new_card.appendChild(content_body);
+        new_card.appendChild(edit_button);
     });
 
     // add elements to the screen
@@ -182,21 +186,29 @@ document.getElementById('AddCardButton').addEventListener('click', (e) => {
     // hide add button
     document.getElementById('AddCardButton').style.display = 'none';
 
-    // send to server
-    let groupList = document.getElementById("group_list");
-    let selectedGroup = groupList.options[groupList.selectedIndex].value;
-    connection.invoke("addCard", selectedGroup, title, content).catch(function (err) {
-        return console.error(err.toString());
-    });
-
-    // increment count
-    card_count++;
 });
 
 connection.on("addCard", function (card) {
-    //let newCard = JSON.parse(card);
-    console.log(card);
+    let newCard = JSON.parse(card);
+    console.log(newCard);
 });
+
+function SendData(form) {
+    title = form.querySelector("input[name='title'").value;
+    content = form.querySelector("input[name='content'").value;
+    let visible = form.querySelector("input[name='checkbox'").value;
+    let groupList = document.getElementById("group_list");
+    let selectedGroup = groupList.options[groupList.selectedIndex].value;
+
+
+    console.log(title, content, visible);
+    document.getElementById('AddCardButton').style.display = 'inline-block';
+
+    // send to server
+    connection.invoke("addCard", selectedGroup, title, content).catch(function (err) {
+        return console.error(err.toString());
+    });
+}
 
 
 
