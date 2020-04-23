@@ -33,28 +33,12 @@ namespace SignalRChat.Hubs
         {
             if (users.Find(user => user.username == username) == null)
             {
-                users.Add(new User(Context.ConnectionId, username));
-                await Clients.Others.SendAsync("addUser", Context.ConnectionId, username); // add user to eveyone elses list of users
+                User newUser = new User(Context.ConnectionId, username);
+                users.Add(newUser);
+                await Clients.All.SendAsync("addUser", JsonConvert.SerializeObject(newUser, Formatting.Indented)); // add user to eveyone elses list of users
             }
             else await Clients.Client(Context.ConnectionId).SendAsync("error", "User Already Exists");
         }
-
-        //[
-        //  {
-        //    "Name": "groupname1",
-        //    [{"cardID": "card1"
-        //     "title": "title1"
-        //     "content": "content1"
-        //    },{
-        //    }]
-        //  },
-        //  {
-        //    "Name": "Product 2",
-        //    "ExpiryDate": "2009-07-31T00:00:00Z",
-        //    "Price": 12.50,
-        //    "Sizes": null
-        //  }
-        //]
 
         public async Task removeUser()
         {
@@ -80,9 +64,19 @@ namespace SignalRChat.Hubs
             await Clients.Others.SendAsync("removeGroup", groupName);
         }
 
-        public async Task editCardLock(int cardId)
+        public async Task editCardLock(string cardID, string userID, string groupName)
         {
-            await Clients.Others.SendAsync("lockCard", cardId);
+            Group group = groups.Find(g => g.name == groupName);
+            if(group != null)
+            {
+                Card card = group.cards.Find(c => ((c.cardID.ToString() == cardID) && (c.userID == userID)));
+                if (card != null)
+                {
+                    card.editable = !card.editable;
+                    await Clients.All.SendAsync("updateCardLock", cardID, userID, groupName);
+                }
+                else await Clients.Client(Context.ConnectionId).SendAsync("error", "card does not exist");
+            }
         }
 
         public async Task addCard(string groupName, string title, string content)

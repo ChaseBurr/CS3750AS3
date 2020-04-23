@@ -15,9 +15,12 @@ let title = "";
 let content = "";
 let GroupList = [];
 let groupdata = {};
+let users = {};
 
 
 //--// On connection functions //--//
+
+connection.on("addUser", (newUser) => users.add(newUser));
 
 connection.on("UpdateGroups", (groups) => {
     groups.forEach(element => GroupList.push(groups));
@@ -290,6 +293,10 @@ function UpdateCardHTML(card_json, groupName) {
 
     // hide add button
 }
+
+connection.on("updateCardLock", (cardID, userID, groupName) => {
+
+});
 
 function RemoveOldHTML() {
 
