@@ -228,8 +228,7 @@ function CreateCardHTML(group_name) {
     edit_button.value = 'Edit';
     edit_button.addEventListener('click', (e) => {
         e.preventDefault();
-        EditCard();
-        alert('test');
+        EditCards(e);
     });
 
     let Title_header = document.createElement('h3');
@@ -329,6 +328,12 @@ function UpdateCardHTML(card_json, groupName) {
     edit_button.type = 'submit';
     edit_button.className = 'btn';
     edit_button.value = 'Edit';
+    new_card.addEventListener('submit', (event) => {
+        event.preventDefault();
+        event.target.querySelectorAll('input').forEach(element => element.readOnly = false);
+        console.log(event.target);
+    });
+
 
     let Title_header = document.createElement('input');
     Title_header.value = card_json.title;
@@ -337,11 +342,6 @@ function UpdateCardHTML(card_json, groupName) {
 
     Title_header.readOnly = true;
     content_body.readOnly = true;
-
-
-
-    //checkbox.onclick = () => { return false };
-
 
     // add elements to the screen
     new_card.appendChild(author);
@@ -371,6 +371,3 @@ connection.on("cardVisibility", (cardID, groupName, visibility) => {
 });
 
 
-function EditCard(form) {
-    alert(form);
-}
