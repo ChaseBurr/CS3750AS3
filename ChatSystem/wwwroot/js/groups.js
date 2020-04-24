@@ -226,9 +226,23 @@ function CreateCardHTML(group_name) {
     edit_button.type = 'submit';
     edit_button.className = 'btn';
     edit_button.value = 'Edit';
-    edit_button.addEventListener('click', (e) => {
+    new_card.addEventListener('submit', (e) => {
         e.preventDefault();
-        EditCards(e);
+        form = e.target;
+        submitButton = form.querySelector('input[type="submit"]');
+        if (submitButton.value = 'Edit') {
+            submitButton.value = 'Save';
+            form.querySelectorAll('intput').forEach(e => e.readOnly = true);
+        }
+        else {
+            submitButton.value = 'Edit';
+            form.querySelectorAll('intput').forEach(e => e.readOnly = false);
+            cardID = form.dataset.cardID;
+            title = form.querySelector('input[name="title"]');
+            content = form.querySelector('input[name="content"]');
+            connection.invoke("editCard", cardID, groupList, title, content);
+        }
+        
     });
 
     let Title_header = document.createElement('h3');
@@ -364,10 +378,10 @@ connection.on("updateCardLock", (cardID, groupName, editability) => {
     else card.readonly = false;
 });
 
-connection.on("removeCard", cardID, groupName) {
+connection.on("removeCard", (cardID, groupName) => {
     let card = card_list.querySelector('div[data-group-name="' + groupName + '"]').querySelector('form[data-card-i-d="' + cardID + '"]');
     card.parent.removeChild(card);
-}
+});
 
 connection.on("cardVisibility", (cardID, groupName, visibility) => {
     let card = card_list.querySelector('div[data-group-name="' + groupName + '"]').querySelector('form[data-card-i-d="' + cardID + '"]');
