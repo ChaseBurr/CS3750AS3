@@ -17,6 +17,9 @@ let GroupList = [];
 let groupdata = {};
 let users = {};
 
+let isLocked = false;
+let UserID;
+
 
 //--// On connection functions //--//
 
@@ -69,6 +72,7 @@ document.getElementById("ShowGroupInput").addEventListener("click", function (ev
 // Login event
 document.getElementById("username_submit").addEventListener("click", function (event) {
     let user = document.getElementById("username").value;
+    username = user;
 
     if (user === "") {
         alert("Please provide a username");
@@ -102,6 +106,7 @@ document.getElementById('AddGroup').addEventListener('click', function (event) {
 
         console.log('Group Added.');
         document.getElementById('group_list').value = input;
+        document.getElementById('AddCardButton').style.display = 'inline-block';
 
         document.getElementById('AddGroup').style.display = 'none'
         document.getElementById('Cancel').style.display = 'none';
@@ -204,6 +209,8 @@ function CreateCardHTML(group_name) {
     let locked = document.createElement('input');
     locked.type = 'checkbox';
     locked.name = 'lockable';
+    //locked.addEventListener('change', (event) {
+    //});
 
     let lockedlabel = document.createElement('label');
     lockedlabel.for = 'lockable';
@@ -219,6 +226,11 @@ function CreateCardHTML(group_name) {
     edit_button.type = 'submit';
     edit_button.className = 'btn';
     edit_button.value = 'Edit';
+    edit_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        EditCard();
+        alert('test');
+    });
 
     let Title_header = document.createElement('h3');
     let content_body = document.createElement('p');
@@ -231,6 +243,7 @@ function CreateCardHTML(group_name) {
         group.removeChild(new_card);
         document.getElementById('AddCardButton').style.display = 'inline-block';
     });
+
 
     // add elements to the screen
     new_card.appendChild(input_title);
@@ -267,28 +280,35 @@ function SendData(form) {
 // update card html to new format
 function UpdateCardHTML(card_json, groupName) {
     let cardID = card_json.cardID;
+    let userId = card_json.userID;
 
     // new card
     let new_card = document.createElement('form');
     new_card.className = 'card_layout';
     new_card.dataset.cardID = cardID;
+    new_card.dataset.userId = userId;
+    new_card.dataset.author = username;
 
     // card styling
     card.style.border = '1px solid black';
 
     // checkbox
     let checkbox = document.createElement('input');
-    checkbox.name = 'checkbox';
     checkbox.type = 'checkbox';
+    checkbox.name = 'visibility';
 
     // label for checkbox
     let label = document.createElement('label');
-    label.for = 'checkbox';
+    label.for = 'visibility';
     label.textContent = 'Visible';
 
     let locked = document.createElement('input');
     locked.type = 'checkbox';
     locked.name = 'lockable';
+
+
+    let author = document.createElement('p');
+    author.textContent =  'Author: ' + username;
 
     let lockedlabel = document.createElement('label');
     lockedlabel.for = 'lockable';
@@ -300,13 +320,21 @@ function UpdateCardHTML(card_json, groupName) {
     edit_button.className = 'btn';
     edit_button.value = 'Edit';
 
-    let Title_header = document.createElement('h3');
-    Title_header.textContent = card_json.title;
-    let content_body = document.createElement('p');
-    content_body.textContent = card_json.content;
+    let Title_header = document.createElement('input');
+    Title_header.value = card_json.title;
+    let content_body = document.createElement('input');
+    content_body.value = card_json.content;
+
+    Title_header.readOnly = true;
+    content_body.readOnly = true;
+
+
+
+    //checkbox.onclick = () => { return false };
 
 
     // add elements to the screen
+    new_card.appendChild(author);
     new_card.appendChild(Title_header);
     new_card.appendChild(content_body);
     new_card.appendChild(checkbox);
@@ -321,9 +349,11 @@ function UpdateCardHTML(card_json, groupName) {
 }
 
 connection.on("updateCardLock", (cardID, userID, groupName) => {
-
+    var group = document.querySelector('div[data-group-name=' + groupName + ']');
+    document.querySelector('form[name = lockable]').checked = true;
 });
 
-function RemoveOldHTML() {
 
+function EditCard(form) {
+    alert(form);
 }
