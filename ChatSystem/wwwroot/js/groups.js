@@ -278,8 +278,13 @@ function UpdateCardHTML(card_json, groupName) {
 
     // checkbox
     let checkbox = document.createElement('input');
-    checkbox.name = 'checkbox';
     checkbox.type = 'checkbox';
+    checkbox.name = 'visibility';
+    checkbox.addEventListener('change', (e) => {
+        let cardID = e.target.form.getAttribute("data-card-i-d");
+        let groupName = document.getElementById('group_list').value;
+        connection.invoke('toggleCardVisibility', cardID, groupName);
+    });
 
     // label for checkbox
     let label = document.createElement('label');
@@ -289,10 +294,15 @@ function UpdateCardHTML(card_json, groupName) {
     let locked = document.createElement('input');
     locked.type = 'checkbox';
     locked.name = 'lockable';
+    locked.addEventListener('change', (e) => {
+        let cardID = e.target.form.getAttribute("data-card-i-d");
+        let groupName = document.getElementById('group_list').value;
+        connection.invoke('toggleEditCardLock', cardID, groupName);
+    });
 
     let lockedlabel = document.createElement('label');
     lockedlabel.for = 'lockable';
-    lockedlabel.textContent = 'Lock';
+    lockedlabel.textContent = 'Edit Lock';
 
 
     let edit_button = document.createElement('input');
@@ -316,12 +326,20 @@ function UpdateCardHTML(card_json, groupName) {
     new_card.appendChild(lockedlabel);
     new_card.appendChild(edit_button);
     //card.appendChild(new_card);
-    let group = card.querySelector('div[data-group-name=' + groupName + "]")
+    let group = card.querySelector('div[data-group-name="' + groupName + '"]')
     group.appendChild(new_card);
 }
 
-connection.on("updateCardLock", (cardID, userID, groupName) => {
+connection.on("updateCardLock", (cardID, groupName, editability) => {
+    let card = card_list.querySelector('div[data-group-name="' + groupName + '"]').querySelector('form[data-card-i-d="' + cardID + '"]');
+    if (editability) card.readonly = true;
+    else card.readonly = false;
+});
 
+connection.on("cardVisibility", (cardID, groupName, visibility) => {
+    let card = card_list.querySelector('div[data-group-name="' + groupName + '"]').querySelector('form[data-card-i-d="' + cardID + '"]');
+    if (visibility == false) card.style.display = 'none';
+    else card.style.display = 'inline-block';
 });
 
 function RemoveOldHTML() {

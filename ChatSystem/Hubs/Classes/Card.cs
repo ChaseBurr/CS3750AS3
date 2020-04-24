@@ -6,7 +6,7 @@ namespace FinalProject.Hubs.Classes
     internal class Card
     {
         
-        private bool visible;
+        public bool visibility;
 
         [JsonProperty("cardID")]
         public Guid cardID { get; set; }
@@ -27,7 +27,7 @@ namespace FinalProject.Hubs.Classes
         public Card()
         {
             this.cardID = Guid.NewGuid();
-            this.editable = this.visible = true;
+            this.editable = this.visibility = true;
             this.content = "";
         }
 
@@ -35,7 +35,7 @@ namespace FinalProject.Hubs.Classes
         {
             this.cardID = Guid.NewGuid();
             this.userID = userID;
-            this.editable = this.visible = true;
+            this.editable = this.visibility = true;
             this.title = title;
             this.content = content;
         }
