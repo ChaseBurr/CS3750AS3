@@ -64,27 +64,45 @@ namespace SignalRChat.Hubs
             await Clients.Others.SendAsync("removeGroup", groupName);
         }
 
-        public async Task editCardLock(string cardID, string groupName)
+        public async Task toggleEditCardLock(string cardID, string groupName)
         {
             string userID = Context.ConnectionId;
             Group group = groups.Find(g => g.name == groupName);
-            if(group != null)
+            if (group != null)
             {
-                Card card = group.cards.Find(c => ((c.cardID.ToString() == cardID) && (c.userID == userID)));
+                Card card = group.cards.Find(c => ((c.cardID.ToString() == cardID) && (c.userID == userID))); // check card ownership
                 if (card != null)
                 {
                     card.editable = !card.editable;
-                    await Clients.Others.SendAsync("updateCardLock", cardID, userID, groupName);
+                    await Clients.Others.SendAsync("updateCardLock", cardID, groupName, card.editable);
                 }
                 else await Clients.Client(Context.ConnectionId).SendAsync("error", "card does not exist");
             }
+            else await Clients.Client(Context.ConnectionId).SendAsync("error", "card does not exist");
+        }
+
+        public async Task toggleCardVisibility(string cardID, string groupName)
+        {
+            string userID = Context.ConnectionId;
+            Group group = groups.Find(g => g.name == groupName);
+            if (group != null)
+            {
+                Card card = group.cards.Find(c => ((c.cardID.ToString() == cardID) && (c.userID == userID))); // check card ownership
+                if (card != null)
+                {
+                    card.visibility = !card.visibility;
+                    await Clients.Others.SendAsync("cardVisibility", cardID, groupName, card.visibility);
+                }
+                else await Clients.Client(Context.ConnectionId).SendAsync("error", "card does not exist");
+            }
+            else await Clients.Client(Context.ConnectionId).SendAsync("error", "group does not exist");
         }
 
         public async Task addCard(string groupName, string title, string content)
         {
             Card card = new Card(Context.ConnectionId, title, content);
             Group group = groups.Find(group => group.name == groupName);
-            if(group != null)
+            if (group != null)
             {
                 group.cards.Add(card);
                 await Clients.All.SendAsync("addCard", JsonConvert.SerializeObject(card, Formatting.Indented), groupName);
@@ -99,7 +117,8 @@ namespace SignalRChat.Hubs
 
         private class Group
         {
-            public string name {
+            public string name
+            {
                 get; set;
             }
             public List<Card> cards;
@@ -109,6 +128,6 @@ namespace SignalRChat.Hubs
                 this.name = name;
                 this.cards = new List<Card>();
             }
-    }
+        }
     }
 }
