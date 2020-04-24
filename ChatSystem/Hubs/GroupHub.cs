@@ -64,6 +64,24 @@ namespace SignalRChat.Hubs
             await Clients.Others.SendAsync("removeGroup", groupName);
         }
 
+        public async Task editCard(string cardID, string groupName, string title, string content)
+        {
+            Group group = groups.Find(g => g.name == groupName);
+            if(group != null)
+            {
+                Card card = group.cards.Find(c => (c.cardID.ToString() == cardID));
+                if(card != null)
+                {
+                    card.title = title;
+                    card.content = content;
+                    await Clients.All.SendAsync("removeCard", cardID, groupName);
+                    await Clients.All.SendAsync("addCard", JsonConvert.SerializeObject(card));
+                }
+                else await Clients.Client(Context.ConnectionId).SendAsync("error", "card does not exist");
+            }
+            else await Clients.Client(Context.ConnectionId).SendAsync("error", "card does not exist");
+        }
+
         public async Task toggleEditCardLock(string cardID, string groupName)
         {
             string userID = Context.ConnectionId;
@@ -109,11 +127,10 @@ namespace SignalRChat.Hubs
             }
         }
 
-        //public async Task gerUsername(string userId)
-        //{
-        //    users.Find(user => user.userID == userId);
-        //    await Clients.All.SendAsync("getUser", user);
-        //}
+        public async Task removeCard(string cardID, string groupName)
+        {
+            await Clients.All.SendAsync("removeCard", cardID, groupName);
+        }
 
         private class Group
         {
