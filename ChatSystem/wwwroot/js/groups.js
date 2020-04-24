@@ -364,6 +364,11 @@ connection.on("updateCardLock", (cardID, groupName, editability) => {
     else card.readonly = false;
 });
 
+connection.on("removeCard", cardID, groupName) {
+    let card = card_list.querySelector('div[data-group-name="' + groupName + '"]').querySelector('form[data-card-i-d="' + cardID + '"]');
+    card.parent.removeChild(card);
+}
+
 connection.on("cardVisibility", (cardID, groupName, visibility) => {
     let card = card_list.querySelector('div[data-group-name="' + groupName + '"]').querySelector('form[data-card-i-d="' + cardID + '"]');
     if (visibility == false) card.style.display = 'none';
